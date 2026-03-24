@@ -1,4 +1,4 @@
-const socket = io("http://localhost:5000");
+const socket = io("https://YOUR-RENDER-URL.onrender.com");
 
 let received = [];
 let fileSize = 0;
@@ -8,6 +8,9 @@ let fileName = "file";
 function receiveFile() {
     const code = document.getElementById("codeInput").value;
     socket.emit("request-file", code);
+
+    received = [];
+    receivedSize = 0;
 }
 
 socket.on("file-meta", (meta) => {
