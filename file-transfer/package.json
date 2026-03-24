@@ -4,7 +4,10 @@
   "main": "server/server.js",
   "scripts": {
     "start": "node server/server.js",
-    "build": "echo build complete"
+    "build": "echo build"
+  },
+  "engines": {
+    "node": "18.x"
   },
   "dependencies": {
     "express": "^4.18.2",
