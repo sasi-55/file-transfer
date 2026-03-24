@@ -4,11 +4,13 @@ const { Server } = require("socket.io");
 const cors = require("cors");
 const multer = require("multer");
 const { v4: uuidv4 } = require("uuid");
+
 const { createTransfer, getTransfer, deleteTransfer } = require("./transfers");
 
 const app = express();
 
 app.use(cors({ origin: "*" }));
+app.use(express.static("public"));
 
 const server = http.createServer(app);
 
@@ -19,7 +21,7 @@ const io = new Server(server, {
 const upload = multer({ storage: multer.memoryStorage() });
 
 app.post("/upload", upload.single("file"), (req, res) => {
-    if (!req.file) return res.status(400).json({ error: "No file" });
+    if (!req.file) return res.status(400).json({ error: "No file uploaded" });
 
     const code = uuidv4().slice(0, 6).toUpperCase();
 
@@ -37,7 +39,7 @@ io.on("connection", (socket) => {
         const transfer = getTransfer(code);
 
         if (!transfer) {
-            socket.emit("error", "Invalid code");
+            socket.emit("error-msg", "Invalid code");
             return;
         }
 
@@ -62,5 +64,5 @@ io.on("connection", (socket) => {
 const PORT = process.env.PORT || 5000;
 
 server.listen(PORT, () => {
-    console.log("Server running on", PORT);
+    console.log("Server running on port", PORT);
 });
